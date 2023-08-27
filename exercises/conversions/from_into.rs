@@ -6,6 +6,7 @@
 //
 // Execute `rustlings hint from_into` or use the `hint` watch subcommand for a
 // hint.
+use std::{convert::From, num::ParseIntError};
 
 #[derive(Debug)]
 struct Person {
@@ -40,10 +41,42 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of
 // Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() == 0 {
+            return Person::default();
+        }
+
+        let mut s_iterator = s.split(',');
+
+        let name = s_iterator.next().unwrap();
+
+        if name.len() == 0 {
+            return Person::default();
+        }
+
+        let s_iterator_age = s_iterator.next();
+        
+        // Check for the more than 2 comma cases
+        if let Some(strr) = s_iterator.next() {
+            return Person::default();
+        }
+
+        
+        if let Some(age_str) = s_iterator_age  {
+            
+            let result_age = age_str.parse::<usize>();
+
+            return match result_age {
+                Ok(usized_age) => Person {
+                    name: String::from(name),
+                    age: usized_age,
+                },
+                Err(_error) => return Person::default(),
+            }
+        } else {
+            return Person::default();
+        }
     }
 }
 
